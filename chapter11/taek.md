@@ -3,7 +3,7 @@
 ## 1. Prepared Statement란? 
 - Java의 JDBC 드라이버를 이용해서 프로그래밍할 때 Prepared Statement 객체를 이용해서 쿼리를 하는 것 (Binding Query라고도 불림)
 ```java
-pstmt = connection.prepareStatement("SELCT * FROM matt id=?");
+pstmt = connection.prepareStatement("SELECT * FROM matt id=?");
 pstmt.setInt(1, 1234);
 rs = pstmt.executeQuery();
 ```
@@ -44,7 +44,7 @@ for(int i = 0; i < 100; i ++) {
 ```
 
 **케이스2 - 반복문 바깥에서 Prepared Statement 함수 한 번 호출 + 반복만 안에서 변수 바인딩 및 쿼리 실행**
-- Prepared Statement 객체 참조를 유지하지 않아서 캐시 사용 가능
+- Prepared Statement 객체 참조를 유지해서 캐시 사용 가능
 - 최초 실행 시 서버 통신 두 번 발생 후 루프를 돌 때마다 서버 통신이 한 번씩만 발생함
 ```java
 PreparedStatement p = conn.prepareStatement("SELECT .. WHERE id=?");
@@ -60,5 +60,5 @@ for(int i = 0; i < 100; i ++) {
   - 기본적으로 MySQL 서버는 대략 16,000개의 Prepared Statement를 캐시할 수 있고, 이 수치를 넘어가면 LRU 패턴에 의해 캐시가 제거됨 (max_prepared_stmt_count=16382)
   - 따라서 커넥션이 계속 재생성되면 MySQL 서버에 캐시되는 데이터의 양도 많아지고(서버의 최대치 내에서), 파싱 비용도 증가함(캐시에서 데이터가 밀려나면 다시 파싱되므로)
   - 적절한 Max Prepared Statement Count 변수를 설정해서 캐시의 양을 늘릴 수 있음
-- 쿼리가 매우가 복잡한 경우엔 파싱 비용을 경감시켜주는 Prepared Statement가 도움이 되지만, 단순하면 장점이 경감됨
+- 쿼리가 매우 복잡한 경우엔 파싱 비용을 경감시켜주는 Prepared Statement가 도움이 되지만, 단순하면 장점이 경감됨
 
